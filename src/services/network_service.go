@@ -50,16 +50,16 @@ func (s *NetworkAPIService) NetworkStatus(
 	ctx context.Context,
 	request *types.NetworkRequest,
 ) (*types.NetworkStatusResponse, *types.Error) {
-	hash, timestamp := GetLatestBlock()
+	hash, height, timestamp := GetLatestBlock()
 	return &types.NetworkStatusResponse{
 		CurrentBlockIdentifier: &types.BlockIdentifier{
-			Index: 1000,
+			Index: height,
 			Hash:  hash,
 		},
 		CurrentBlockTimestamp: timestamp,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
 			Index: 0,
-			Hash:  "block 0",
+			Hash:  "0xcf43b3fd45981431a0e64f79d07bfcf703e064b73b802c5f32834eec72142190\n",
 		},
 		Peers: []*types.Peer{
 			{
