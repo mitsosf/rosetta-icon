@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/coinbase/rosetta-sdk-go"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
 )

@@ -19,11 +19,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/coinbase/rosetta-sdk-go"
 	"github.com/coinbase/rosetta-sdk-go/asserter"
-	"github.com/coinbase/rosetta-sdk-go/examples/server/services"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
+	"rosetta-icon/server/services"
 )
 
 const (
@@ -53,13 +52,13 @@ func NewBlockchainRouter(
 
 func main() {
 	network := &types.NetworkIdentifier{
-		Blockchain: "Rosetta",
-		Network:    "Testnet",
+		Blockchain: "icon",
+		Network:    "mainnet",
 	}
 
 	// The asserter automatically rejects incorrectly formatted
 	// requests.
-	asserter, err := asserter.NewServer(
+	asserterInstance, err := asserter.NewServer(
 		[]string{"Transfer", "Reward"},
 		false,
 		[]*types.NetworkIdentifier{network},
@@ -70,7 +69,7 @@ func main() {
 
 	// Create the main router handler then apply the logger and Cors
 	// middlewares in sequence.
-	router := NewBlockchainRouter(network, asserter)
+	router := NewBlockchainRouter(network, asserterInstance)
 	loggedRouter := server.LoggerMiddleware(router)
 	corsRouter := server.CorsMiddleware(loggedRouter)
 	log.Printf("Listening on port %d\n", serverPort)
