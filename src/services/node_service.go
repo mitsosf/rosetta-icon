@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/mitsosf/rosetta-icon/src/helpers"
 	"go/types"
 	"net/http"
 )
@@ -23,7 +24,7 @@ type Result struct {
 	confirmedTransactionList types.Slice
 }
 
-func GetLatestBlock() (string, int64, int64) {
+func GetLatestBlock() (hash string, height int64, timestamp int64) {
 
 	uri := "https://ctz.solidwallet.io/api/v3"
 
@@ -44,9 +45,7 @@ func GetLatestBlock() (string, int64, int64) {
 
 	json.NewDecoder(resp.Body).Decode(&res)
 	result := res["result"].(map[string]interface{})
-	var hash string
-	var height int64
-	var timestamp int64
+
 	for key, value := range result {
 		switch key {
 		case "block_hash":
@@ -60,4 +59,35 @@ func GetLatestBlock() (string, int64, int64) {
 		}
 	}
 	return hash, height, timestamp
+}
+
+func GetAccountBalance(address string) (balance string, blockhash string, blockheight int64) {
+
+	uri := "https://ctz.solidwallet.io/api/v3"
+
+	values := map[string]interface{}{
+		"jsonrpc": "2.0",
+		"method":  "icx_getBalance",
+		"id":      "1234",
+		"params": map[string]string{
+			"address": address,
+		},
+	}
+
+	jsonValue, _ := json.Marshal(values)
+	resp, err := http.Post(uri, "application/json", bytes.NewBuffer(jsonValue))
+
+	if err != nil {
+		panic(err)
+	}
+
+	var res map[string]interface{}
+
+	json.NewDecoder(resp.Body).Decode(&res)
+	balance = helpers.HexToDecimal(res["result"].(string))
+
+	//Get block
+	blockhash, blockheight, _ = GetLatestBlock()
+
+	return balance, blockhash, blockheight
 }
