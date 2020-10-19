@@ -58,7 +58,7 @@ func (s *NetworkAPIService) NetworkStatus(
 		CurrentBlockTimestamp: timestamp,
 		GenesisBlockIdentifier: &types.BlockIdentifier{
 			Index: 0,
-			Hash:  "0xcf43b3fd45981431a0e64f79d07bfcf703e064b73b802c5f32834eec72142190\n",
+			Hash:  "0xcf43b3fd45981431a0e64f79d07bfcf703e064b73b802c5f32834eec72142190",
 		},
 		Peers: []*types.Peer{
 			{
